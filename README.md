@@ -76,5 +76,3 @@ To analyze the scraped data using a Jupyter notebook:
 4. To re-run the analysis with updated data, make sure to restart the kernel and run all cells again.
 
 Note: The analysis notebook automatically uses the most recent CSV file in the `data` directory, so you don't need to update the file path manually.
-
-[![tests](https://github.com/lucasheriques/comp-scraping/actions/workflows/tests.yml/badge.svg)](https://github.com/lucasheriques/comp-scraping/actions/workflows/tests.yml)
