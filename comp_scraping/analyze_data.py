@@ -62,37 +62,20 @@ def analyze_data(df):
     tenure_corr = df['Years at Company'].corr(df['Total Compensation'])
     results['Correlation (Years at Company vs Total Compensation)'] = f"{tenure_corr:.2f}"
 
-    # Visualizations
-    plt.figure(figsize=(10, 6))
-    sns.histplot(df['Total Compensation'], kde=True)
-    plt.title('Distribution of Total Compensation')
-    plt.xlabel('Total Compensation (R$)')
-    plt.ticklabel_format(style='plain', axis='x')
-    plt.savefig('salary_distribution.png')
-    plt.close()
+    # Convert results to a more notebook-friendly format
+    formatted_results = {
+        'Average Compensation by Experience Group': results['Average Compensation by Experience Group'].to_dict()['Average Compensation'],
+        'Top Paying Companies by Experience Group': {group: companies.to_dict() for group, companies in results['Top Paying Companies by Experience Group'].items()},
+        'Highest Average Salary Overall': results['Highest Average Salary Overall'],
+        'Correlation (Years of Experience vs Total Compensation)': results['Correlation (Years of Experience vs Total Compensation)'],
+        'Correlation (Years at Company vs Total Compensation)': results['Correlation (Years at Company vs Total Compensation)'],
+    }
 
-    plt.figure(figsize=(12, 6))
-    sns.boxplot(x='Experience Group', y='Total Compensation', data=df)
-    plt.title('Total Compensation by Experience Group')
-    plt.ylabel('Total Compensation (R$)')
-    plt.ticklabel_format(style='plain', axis='y')
-    plt.savefig('compensation_by_experience.png')
-    plt.close()
-
-    plt.figure(figsize=(12, 6))
-    sns.scatterplot(x='Years of Experience', y='Total Compensation', data=df)
-    plt.title('Total Compensation vs Years of Experience')
-    plt.xlabel('Years of Experience')
-    plt.ylabel('Total Compensation (R$)')
-    plt.ticklabel_format(style='plain', axis='y')
-    plt.savefig('compensation_vs_experience.png')
-    plt.close()
-
-    return results
+    return formatted_results
 
 if __name__ == "__main__":
     file_path = 'data/brazil_software_engineer_salaries_2024-09-11-00-27-27.csv'
     df = load_data(file_path)
     df = clean_data(df)
     results = analyze_data(df)
-    print("Analysis complete. Check the generated PNG files for visualizations.")
+    print("Analysis complete. Plots are available in the 'plots' key of the results dictionary.")

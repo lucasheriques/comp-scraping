@@ -24,6 +24,7 @@ pytest = "^7.4.0"
 [tool.poetry.scripts]
 scrape = "comp_scraping.scraper:main"
 test = "pytest:main"
+analyze = "comp_scraping.notebook_runner:main"
 
 [build-system]
 requires = ["poetry-core"]

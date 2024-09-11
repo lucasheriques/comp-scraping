@@ -29,8 +29,14 @@ Comp-Scraping is a web scraper designed to collect salary data for software engi
    ```
 
 4. Install dependencies using Poetry:
+
    ```
    poetry install
+   ```
+
+5. Activate the virtual environment:
+   ```
+   poetry shell
    ```
 
 ## Usage
