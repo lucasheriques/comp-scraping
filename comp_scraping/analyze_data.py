@@ -1,88 +1,98 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import locale
+
+# Set locale to Portuguese (Brazil) for currency formatting
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 def load_data(file_path):
     return pd.read_csv(file_path)
 
 def clean_data(df):
     df['Total Compensation'] = df['Total Compensation'].str.replace('R$', '').str.replace(',', '').astype(float)
+    df['Years of Experience'] = df['Years of Experience'].str.extract('(\d+)').astype(float)
+    df['Years at Company'] = df['Years at Company'].str.extract('(\d+)').astype(float)
     return df
 
-def categorize_companies(df):
-    thresholds = df['Total Compensation'].quantile([0.33, 0.67])
+def format_currency(value):
+    return locale.currency(value, grouping=True, symbol='R$')
 
-    def assign_tier(comp):
-        if comp <= thresholds.iloc[0]:
-            return 'Tier 1'
-        elif comp <= thresholds.iloc[1]:
-            return 'Tier 2'
-        else:
-            return 'Tier 3'
-
-    df['Tier'] = df['Total Compensation'].apply(assign_tier)
-    return df
+def categorize_experience(years):
+    if years <= 3:
+        return '0-3 years'
+    elif years <= 7:
+        return '4-7 years'
+    elif years <= 12:
+        return '8-12 years'
+    else:
+        return '13+ years'
 
 def analyze_data(df):
-    print("Summary Statistics by Tier:")
-    print(df.groupby('Tier').agg({
-        'Company': 'count',
-        'Total Compensation': ['mean', 'median', 'min', 'max']
-    }))
+    results = {}
 
-    print("\nTop 10 Companies by Average Compensation:")
-    top_companies = df.groupby('Company')['Total Compensation'].mean().sort_values(ascending=False).head(10)
-    print(top_companies)
+    # Experience group analysis
+    df['Experience Group'] = df['Years of Experience'].apply(categorize_experience)
+    exp_group_avg = df.groupby('Experience Group')['Total Compensation'].mean().sort_values(ascending=False)
+    results['Average Compensation by Experience Group'] = exp_group_avg.apply(format_currency).to_frame('Average Compensation')
 
-    print("\nTop 10 Companies by Average Compensation (with at least 5 data points):")
-    company_counts = df['Company'].value_counts()
-    companies_with_5_plus = company_counts[company_counts >= 5].index
-    top_companies_5_plus = df[df['Company'].isin(companies_with_5_plus)].groupby('Company')['Total Compensation'].mean().sort_values(ascending=False).head(10)
-    print(top_companies_5_plus)
+    # Top paying companies by experience group
+    top_companies_by_group = {}
+    for group in ['0-3 years', '4-7 years', '8-12 years', '13+ years']:
+        group_df = df[df['Experience Group'] == group]
+        company_avg = group_df.groupby('Company').agg({
+            'Total Compensation': 'mean',
+            'Company': 'count'
+        }).rename(columns={'Company': 'Count'}).sort_values('Total Compensation', ascending=False)
 
-    # Plotting
-    plt.figure(figsize=(12, 6))
-    sns.boxplot(x='Tier', y='Total Compensation', data=df)
-    plt.title('Total Compensation by Tier')
-    plt.ylabel('Total Compensation (R$)')
-    plt.savefig('compensation_by_tier.png')
-    plt.close()
+        top_companies = company_avg[company_avg['Count'] >= 3].head(10)
+        top_companies['Total Compensation'] = top_companies['Total Compensation'].apply(format_currency)
+        top_companies_by_group[group] = top_companies
 
-    plt.figure(figsize=(12, 6))
-    sns.histplot(data=df, x='Total Compensation', hue='Tier', multiple='stack')
-    plt.title('Distribution of Total Compensation by Tier')
+    results['Top Paying Companies by Experience Group'] = top_companies_by_group
+
+    # Highest average salary overall
+    results['Highest Average Salary Overall'] = format_currency(df['Total Compensation'].mean())
+
+    # Experience vs Compensation correlation
+    exp_corr = df['Years of Experience'].corr(df['Total Compensation'])
+    results['Correlation (Years of Experience vs Total Compensation)'] = f"{exp_corr:.2f}"
+
+    # Company tenure vs Compensation correlation
+    tenure_corr = df['Years at Company'].corr(df['Total Compensation'])
+    results['Correlation (Years at Company vs Total Compensation)'] = f"{tenure_corr:.2f}"
+
+    # Visualizations
+    plt.figure(figsize=(10, 6))
+    sns.histplot(df['Total Compensation'], kde=True)
+    plt.title('Distribution of Total Compensation')
     plt.xlabel('Total Compensation (R$)')
-    plt.ylabel('Frequency')
-    plt.savefig('compensation_distribution.png')
+    plt.ticklabel_format(style='plain', axis='x')
+    plt.savefig('salary_distribution.png')
     plt.close()
 
-    # Location analysis
-    location_avg_comp = df.groupby('Location')['Total Compensation'].mean().sort_values(ascending=False).head(10)
     plt.figure(figsize=(12, 6))
-    location_avg_comp.plot(kind='bar')
-    plt.title('Top 10 Locations by Average Compensation')
-    plt.xlabel('Location')
-    plt.ylabel('Average Total Compensation (R$)')
-    plt.xticks(rotation=45, ha='right')
-    plt.tight_layout()
-    plt.savefig('top_locations.png')
+    sns.boxplot(x='Experience Group', y='Total Compensation', data=df)
+    plt.title('Total Compensation by Experience Group')
+    plt.ylabel('Total Compensation (R$)')
+    plt.ticklabel_format(style='plain', axis='y')
+    plt.savefig('compensation_by_experience.png')
     plt.close()
 
-    # New plot for top companies with 5+ data points
     plt.figure(figsize=(12, 6))
-    top_companies_5_plus.plot(kind='bar')
-    plt.title('Top 10 Companies by Average Compensation (5+ data points)')
-    plt.xlabel('Company')
-    plt.ylabel('Average Total Compensation (R$)')
-    plt.xticks(rotation=45, ha='right')
-    plt.tight_layout()
-    plt.savefig('top_companies_5_plus.png')
+    sns.scatterplot(x='Years of Experience', y='Total Compensation', data=df)
+    plt.title('Total Compensation vs Years of Experience')
+    plt.xlabel('Years of Experience')
+    plt.ylabel('Total Compensation (R$)')
+    plt.ticklabel_format(style='plain', axis='y')
+    plt.savefig('compensation_vs_experience.png')
     plt.close()
+
+    return results
 
 if __name__ == "__main__":
-    file_path = 'brazil_software_engineer_salaries.csv'
+    file_path = 'data/brazil_software_engineer_salaries_2024-09-11-00-27-27.csv'
     df = load_data(file_path)
     df = clean_data(df)
-    df = categorize_companies(df)
-    analyze_data(df)
+    results = analyze_data(df)
     print("Analysis complete. Check the generated PNG files for visualizations.")
