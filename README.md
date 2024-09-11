@@ -1,6 +1,6 @@
 # Comp-Scraping
 
-[![Python Tests](https://github.com/lucasheriques/comp-scraping/actions/workflows/python-tests.yml/badge.svg)](https://github.com/lucasheriques/comp-scraping/actions/workflows/python-tests.yml)
+[![tests](https://github.com/lucasheriques/comp-scraping/actions/workflows/tests.yml/badge.svg)](https://github.com/lucasheriques/comp-scraping/actions/workflows/tests.yml)
 
 Comp-Scraping is a web scraper designed to collect salary data for software engineers in Brazil from levels.fyi. This project uses Python and Selenium to automate data collection and analysis.
 
@@ -77,4 +77,4 @@ To analyze the scraped data using a Jupyter notebook:
 
 Note: The analysis notebook automatically uses the most recent CSV file in the `data` directory, so you don't need to update the file path manually.
 
-[![Python Tests](https://github.com/lucasheriques/comp-scraping/actions/workflows/python-tests.yml/badge.svg)](https://github.com/lucasheriques/comp-scraping/actions/workflows/python-tests.yml)
+[![tests](https://github.com/lucasheriques/comp-scraping/actions/workflows/tests.yml/badge.svg)](https://github.com/lucasheriques/comp-scraping/actions/workflows/tests.yml)
