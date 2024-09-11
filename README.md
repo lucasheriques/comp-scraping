@@ -1,5 +1,7 @@
 # Comp-Scraping
 
+[![Python Tests](https://github.com/lucasheriques/comp-scraping/actions/workflows/python-tests.yml/badge.svg)](https://github.com/lucasheriques/comp-scraping/actions/workflows/python-tests.yml)
+
 Comp-Scraping is a web scraper designed to collect salary data for software engineers in Brazil from levels.fyi. This project uses Python and Selenium to automate data collection and analysis.
 
 ## Tools and Technologies
