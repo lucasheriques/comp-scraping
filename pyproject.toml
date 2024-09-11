@@ -4,6 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Lucas Faria <lucasheriques@gmail.com>"]
 readme = "README.md"
+packages = [{include = "comp_scraping"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -16,6 +17,12 @@ matplotlib = "^3.9.2"
 seaborn = "^0.13.2"
 keyboard = "^0.13.5"
 
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+
+[tool.poetry.scripts]
+scrape = "comp_scraping.scraper:main"
+test = "pytest:main"
 
 [build-system]
 requires = ["poetry-core"]
