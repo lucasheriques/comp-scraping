@@ -24,7 +24,7 @@ Comp-Scraping is a web scraper designed to collect salary data for software engi
 3. Clone the repository:
 
    ```
-   git clone https://github.com/your-username/comp-scraping.git
+   git clone https://github.com/lucasheriques/comp-scraping.git
    cd comp-scraping
    ```
 
@@ -51,8 +51,6 @@ poetry run scrape
 
 This will start the scraping process and save the data to a CSV file in the `data` directory.
 
-This will start the scraping process and save the data to a CSV file in the `data` directory.
-
 ### Data Analysis
 
 To analyze the scraped data using a Jupyter notebook:
@@ -76,3 +74,5 @@ To analyze the scraped data using a Jupyter notebook:
 4. To re-run the analysis with updated data, make sure to restart the kernel and run all cells again.
 
 Note: The analysis notebook automatically uses the most recent CSV file in the `data` directory, so you don't need to update the file path manually.
+
+[![Python Tests](https://github.com/lucasheriques/comp-scraping/actions/workflows/python-tests.yml/badge.svg)](https://github.com/lucasheriques/comp-scraping/actions/workflows/python-tests.yml)
