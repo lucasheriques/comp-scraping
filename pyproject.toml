@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "comp-scraping"
+version = "0.1.0"
+description = ""
+authors = ["Lucas Faria <lucasheriques@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+requests = "^2.32.3"
+beautifulsoup4 = "^4.12.3"
+pandas = "^2.2.2"
+selenium = "^4.24.0"
+webdriver-manager = "^4.0.2"
+matplotlib = "^3.9.2"
+seaborn = "^0.13.2"
+keyboard = "^0.13.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
