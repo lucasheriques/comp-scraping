@@ -11,7 +11,6 @@ def load_data(file_path):
 
 def clean_data(df):
     df['Total Compensation'] = df['Total Compensation'].str.replace('R$', '').str.replace(',', '').astype(float)
-    # Divide the total compensation by 12 to get monthly salary
     df['Total Compensation'] = df['Total Compensation'] / 12
     df['Years of Experience'] = df['Years of Experience'].str.extract('(\d+)').astype(float)
     df['Years at Company'] = df['Years at Company'].str.extract('(\d+)').astype(float)
@@ -111,7 +110,7 @@ def analyze_data(df):
     # Calculate average compensation by tier
     tier_stats = df.groupby('Company Tier')['Total Compensation'].agg(['mean', 'median'])
     tier_stats = tier_stats.sort_values('mean', ascending=False)
-    tier_stats = tier_stats.applymap(format_currency)
+    tier_stats = tier_stats.map(format_currency)
     results['Compensation Stats by Company Tier'] = tier_stats.to_dict()
 
     # Convert results to a more notebook-friendly format
