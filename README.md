@@ -4,6 +4,8 @@
 
 Comp-Scraping is a web scraper designed to collect salary data for software engineers in Brazil from levels.fyi. This project uses Python and Selenium to automate data collection and analysis.
 
+Want to check out the last analysis? [Open the notebook here](https://github.com/lucasheriques/comp-scraping/blob/main/comp_scraping/data_analysis.ipynb).
+
 ## Tools and Technologies
 
 - Python 3.12+
