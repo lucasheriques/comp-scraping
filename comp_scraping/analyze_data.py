@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import scipy
 import locale
 
 # Set locale to Portuguese (Brazil) for currency formatting
@@ -90,12 +91,12 @@ def analyze_data(df):
 
     results['Top Paying Companies by Experience Group'] = top_companies_by_group
 
-    # Experience vs Compensation correlation
-    exp_corr = df['Years of Experience'].corr(df['Total Compensation'])
+    # Experience vs Compensation correlation (Spearman)
+    exp_corr = df['Years of Experience'].corr(df['Total Compensation'], method='spearman')
     results['Correlation (Years of Experience vs Total Compensation)'] = f"{exp_corr:.2f}"
 
-    # Company tenure vs Compensation correlation
-    tenure_corr = df['Years at Company'].corr(df['Total Compensation'])
+    # Company tenure vs Compensation correlation (Spearman)
+    tenure_corr = df['Years at Company'].corr(df['Total Compensation'], method='spearman')
     results['Correlation (Years at Company vs Total Compensation)'] = f"{tenure_corr:.2f}"
 
     # Add company tiers analysis

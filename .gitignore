@@ -23,9 +23,6 @@ poetry.lock
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# Data files
-*/data/*.csv
-
 # Logs
 *.log
 
